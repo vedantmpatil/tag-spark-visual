@@ -41,62 +41,56 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            AI Image Tagging & Search
-          </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Upload images for automatic AI-powered captioning and tag extraction, 
-            then search your collection using natural language queries.
-          </p>
-        </div>
+    <div className="space-y-8">
+      <div className="text-center">
+        <h1 className="text-3xl font-bold text-gray-900 mb-4">
+          AI Image Search
+        </h1>
+        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          Upload images for automatic AI-powered captioning and tag extraction, 
+          then search your collection using natural language queries.
+        </p>
+      </div>
 
-        <StatusBar />
+      <StatusBar />
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 max-w-md mx-auto mb-8">
-            <TabsTrigger value="upload">Upload Images</TabsTrigger>
-            <TabsTrigger value="search">Search Images</TabsTrigger>
-          </TabsList>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="grid w-full grid-cols-2 max-w-md mx-auto mb-8">
+          <TabsTrigger value="upload">Upload Images</TabsTrigger>
+          <TabsTrigger value="search">Search Images</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="upload" className="space-y-6">
+          <ImageUpload onUploadComplete={handleUploadComplete} />
           
-          <TabsContent value="upload" className="space-y-6">
-            <ImageUpload onUploadComplete={handleUploadComplete} />
-            
-            {uploadedFiles.length > 0 && (
-              <div>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4 text-center">
-                  Recently Uploaded Images
-                </h2>
-                <ImageGrid 
-                  uploadedFiles={uploadedFiles}
-                  mode="upload"
-                />
-              </div>
-            )}
-          </TabsContent>
-          
-          <TabsContent value="search" className="space-y-6">
-            <SearchInterface 
-              onSearchResults={handleSearchResults}
-              onSearchQuery={handleSearchQuery}
-            />
-            
+          {uploadedFiles.length > 0 && (
             <div>
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4 text-center">
+                Recently Uploaded Images
+              </h2>
               <ImageGrid 
-                results={searchResults}
-                searchQuery={searchQuery}
-                mode="search"
+                uploadedFiles={uploadedFiles}
+                mode="upload"
               />
             </div>
-          </TabsContent>
-        </Tabs>
-
-        <footer className="mt-16 text-center text-gray-500 text-sm">
-          <p>Powered by BLIP image captioning and spaCy NLP processing</p>
-        </footer>
-      </div>
+          )}
+        </TabsContent>
+        
+        <TabsContent value="search" className="space-y-6">
+          <SearchInterface 
+            onSearchResults={handleSearchResults}
+            onSearchQuery={handleSearchQuery}
+          />
+          
+          <div>
+            <ImageGrid 
+              results={searchResults}
+              searchQuery={searchQuery}
+              mode="search"
+            />
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

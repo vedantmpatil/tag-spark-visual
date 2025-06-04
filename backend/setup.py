@@ -1,7 +1,7 @@
 
 #!/usr/bin/env python3
 """
-Setup script for the image tagging backend.
+Setup script for the AI Content Suite backend.
 Run this to install dependencies and download required models.
 """
 
@@ -21,7 +21,7 @@ def run_command(command):
         return False
 
 def main():
-    print("Setting up Image Tagging Backend...")
+    print("Setting up AI Content Suite Backend...")
     print("=" * 50)
     
     # Install Python requirements
@@ -39,11 +39,17 @@ def main():
     # Create necessary directories
     print("\n3. Creating directories...")
     os.makedirs("uploads", exist_ok=True)
+    os.makedirs("videos", exist_ok=True)
     print("✓ Created uploads directory")
+    print("✓ Created videos directory")
     
     print("\n" + "=" * 50)
     print("Setup complete! You can now run the backend with:")
     print("python app.py")
+    print("\nAvailable features:")
+    print("- Image tagging and search")
+    print("- Text summarization")
+    print("- Video caption and summary")
     
 if __name__ == "__main__":
     main()
