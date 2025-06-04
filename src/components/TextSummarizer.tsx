@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Loader, Copy, FileText } from 'lucide-react';
+import { Loader, Copy, FileText, Sparkles } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
 const TextSummarizer: React.FC = () => {
@@ -14,6 +14,7 @@ const TextSummarizer: React.FC = () => {
   const [stats, setStats] = useState<{
     originalLength: number;
     summaryLength: number;
+    compressionRatio: number;
   } | null>(null);
 
   const handleSummarize = async () => {
@@ -26,10 +27,10 @@ const TextSummarizer: React.FC = () => {
       return;
     }
 
-    if (inputText.trim().length < 50) {
+    if (inputText.trim().split(' ').length < 10) {
       toast({
         title: "Error",
-        description: "Text must be at least 50 characters long",
+        description: "Text must be at least 10 words long for meaningful summarization",
         variant: "destructive",
       });
       return;
@@ -58,11 +59,12 @@ const TextSummarizer: React.FC = () => {
       setStats({
         originalLength: result.original_length,
         summaryLength: result.summary_length,
+        compressionRatio: result.compression_ratio,
       });
 
       toast({
         title: "Success",
-        description: "Text summarized successfully!",
+        description: `Text summarized successfully! ${result.compression_ratio}% compression achieved.`,
       });
     } catch (error) {
       console.error('Summarization error:', error);
@@ -84,14 +86,27 @@ const TextSummarizer: React.FC = () => {
     });
   };
 
+  const handleClear = () => {
+    setInputText('');
+    setSummary('');
+    setStats(null);
+  };
+
+  const sampleTexts = [
+    "Paste your long article, research paper, or multiple captions here...",
+    "Try pasting meeting notes, blog posts, or interview transcripts...",
+    "You can also paste multiple image captions to get a unified summary..."
+  ];
+
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="text-center">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">
-          Text Summarizer
+        <h1 className="text-3xl font-bold text-gray-900 mb-4 flex items-center justify-center gap-2">
+          <Sparkles className="w-8 h-8 text-purple-600" />
+          AI Text Summarizer
         </h1>
         <p className="text-lg text-gray-600">
-          Paste long text or multiple captions to get a concise, deduplicated summary
+          Get meaningful, intelligent summaries using advanced AI. Perfect for long articles, research papers, and document analysis.
         </p>
       </div>
 
@@ -103,57 +118,77 @@ const TextSummarizer: React.FC = () => {
             </label>
             <Textarea
               id="input-text"
-              placeholder="Paste your text here... (minimum 50 characters)"
+              placeholder={sampleTexts[Math.floor(Math.random() * sampleTexts.length)]}
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              className="min-h-[200px]"
+              className="min-h-[250px] text-sm leading-relaxed"
               disabled={loading}
             />
             <div className="flex items-center justify-between mt-2">
-              <span className="text-xs text-gray-500">
-                {inputText.length} characters
-              </span>
-              {inputText.length >= 50 && (
-                <Badge variant="secondary">Ready to summarize</Badge>
+              <div className="flex items-center space-x-4 text-xs text-gray-500">
+                <span>{inputText.length} characters</span>
+                <span>•</span>
+                <span>{inputText.split(' ').filter(w => w.length > 0).length} words</span>
+              </div>
+              {inputText.split(' ').filter(w => w.length > 0).length >= 10 && (
+                <Badge variant="secondary" className="text-xs">
+                  Ready for AI processing
+                </Badge>
               )}
             </div>
           </div>
 
-          <Button 
-            onClick={handleSummarize} 
-            disabled={loading || inputText.trim().length < 50}
-            className="w-full"
-          >
-            {loading ? (
-              <>
-                <Loader className="w-4 h-4 mr-2 animate-spin" />
-                Summarizing...
-              </>
-            ) : (
-              <>
-                <FileText className="w-4 h-4 mr-2" />
-                Summarize Text
-              </>
+          <div className="flex space-x-2">
+            <Button 
+              onClick={handleSummarize} 
+              disabled={loading || inputText.trim().split(' ').length < 10}
+              className="flex-1"
+            >
+              {loading ? (
+                <>
+                  <Loader className="w-4 h-4 mr-2 animate-spin" />
+                  Analyzing & Summarizing...
+                </>
+              ) : (
+                <>
+                  <FileText className="w-4 h-4 mr-2" />
+                  Generate Summary
+                </>
+              )}
+            </Button>
+            
+            {inputText && (
+              <Button 
+                onClick={handleClear} 
+                variant="outline"
+                disabled={loading}
+              >
+                Clear
+              </Button>
             )}
-          </Button>
+          </div>
         </div>
       </Card>
 
       {summary && (
-        <Card className="p-6">
+        <Card className="p-6 border-green-200 bg-green-50">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-gray-900">Summary</h3>
+              <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-green-600" />
+                AI-Generated Summary
+              </h3>
               <div className="flex items-center space-x-2">
                 {stats && (
-                  <Badge variant="outline">
-                    {Math.round((stats.summaryLength / stats.originalLength) * 100)}% compression
+                  <Badge variant="outline" className="bg-white">
+                    {stats.compressionRatio}% compression
                   </Badge>
                 )}
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={handleCopy}
+                  className="bg-white"
                 >
                   <Copy className="w-4 h-4 mr-1" />
                   Copy
@@ -161,20 +196,37 @@ const TextSummarizer: React.FC = () => {
               </div>
             </div>
             
-            <div className="bg-gray-50 rounded-lg p-4">
-              <p className="text-gray-800 leading-relaxed">{summary}</p>
+            <div className="bg-white rounded-lg p-4 border border-green-200">
+              <p className="text-gray-800 leading-relaxed text-sm">{summary}</p>
             </div>
 
             {stats && (
-              <div className="flex items-center space-x-4 text-sm text-gray-600">
-                <span>Original: {stats.originalLength} characters</span>
-                <span>•</span>
-                <span>Summary: {stats.summaryLength} characters</span>
+              <div className="flex items-center justify-between text-sm text-gray-600 pt-2 border-t border-green-200">
+                <div className="flex items-center space-x-4">
+                  <span>Original: {stats.originalLength} chars</span>
+                  <span>•</span>
+                  <span>Summary: {stats.summaryLength} chars</span>
+                </div>
+                <Badge variant="secondary" className="bg-white">
+                  {stats.compressionRatio}% of original length
+                </Badge>
               </div>
             )}
           </div>
         </Card>
       )}
+
+      <Card className="p-4 bg-blue-50 border-blue-200">
+        <div className="text-sm text-blue-800">
+          <h4 className="font-medium mb-2">💡 Tips for better summaries:</h4>
+          <ul className="space-y-1 text-xs">
+            <li>• Use well-structured text with clear sentences</li>
+            <li>• Longer texts (100+ words) produce more meaningful summaries</li>
+            <li>• The AI removes duplicate content and focuses on key information</li>
+            <li>• Try pasting multiple related articles for comprehensive summaries</li>
+          </ul>
+        </div>
+      </Card>
     </div>
   );
 };

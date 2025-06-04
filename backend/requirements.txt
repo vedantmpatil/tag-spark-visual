@@ -10,3 +10,7 @@ requests==2.31.0
 opencv-python==4.8.0.76
 numpy==1.24.3
 scikit-learn==1.3.0
+flask-socketio==5.3.5
+python-socketio==5.8.0
+sentence-transformers==2.2.2
+nltk==3.8.1
