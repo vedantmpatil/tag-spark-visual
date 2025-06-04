@@ -1,73 +1,137 @@
-# Welcome to your Lovable project
 
-## Project info
+# AI Image Tagging & Search Application
 
-**URL**: https://lovable.dev/projects/7c494954-836c-43d7-b9be-142d3b5acd9e
+A full-stack web application that automatically generates captions and tags for images using AI, and provides intelligent search functionality.
 
-## How can I edit this code?
+## Features
 
-There are several ways of editing your application.
+🔍 **AI-Powered Image Analysis**
+- Automatic caption generation using BLIP (Bootstrapped Language-Image Pre-training)
+- Intelligent tag extraction using spaCy NLP
+- Support for multiple image formats (JPG, PNG, GIF, BMP, WebP)
 
-**Use Lovable**
+🎯 **Smart Search**
+- Natural language search queries
+- Relevance scoring for search results
+- Tag-based and caption-based matching
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/7c494954-836c-43d7-b9be-142d3b5acd9e) and start prompting.
+💾 **Simple Storage**
+- JSON-based data storage (no database required)
+- Local file system for image storage
+- Portable and easy to backup
 
-Changes made via Lovable will be committed automatically to this repo.
+🎨 **Modern UI**
+- Responsive React frontend with Tailwind CSS
+- Drag & drop image upload
+- Real-time search with smooth animations
+- Mobile-friendly design
 
-**Use your preferred IDE**
+## Tech Stack
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+**Frontend:**
+- React 18 with TypeScript
+- Tailwind CSS for styling
+- shadcn/ui components
+- React Dropzone for file uploads
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+**Backend:**
+- Python Flask web server
+- Transformers library (BLIP model)
+- spaCy for natural language processing
+- PIL for image processing
 
-Follow these steps:
+## Setup Instructions
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Backend Setup
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+1. Navigate to the backend directory:
+```bash
+cd backend
+```
 
-# Step 3: Install the necessary dependencies.
-npm i
+2. Install Python dependencies and download models:
+```bash
+python setup.py
+```
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+3. Start the Flask server:
+```bash
+python app.py
+```
+
+The backend will run on `http://localhost:5000`
+
+### Frontend Setup
+
+1. Install Node.js dependencies:
+```bash
+npm install
+```
+
+2. Start the development server:
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The frontend will run on `http://localhost:8080`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Usage
 
-**Use GitHub Codespaces**
+### Upload Images
+1. Go to the "Upload Images" tab
+2. Drag & drop images or click to select files
+3. Wait for AI processing to complete
+4. View generated captions and tags
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Search Images
+1. Go to the "Search Images" tab  
+2. Enter natural language queries like:
+   - "brown dog"
+   - "sunset beach"
+   - "red car"
+   - "person with glasses"
+3. View search results sorted by relevance
 
-## What technologies are used for this project?
+## API Endpoints
 
-This project is built with:
+- `POST /upload` - Upload and process images
+- `POST /search` - Search images by text query
+- `GET /images/<filename>` - Serve image files
+- `GET /status` - Get system status
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Data Storage
 
-## How can I deploy this project?
+Images and metadata are stored locally:
+- `backend/uploads/` - Uploaded image files
+- `backend/image_data.json` - Image metadata and tags
 
-Simply open [Lovable](https://lovable.dev/projects/7c494954-836c-43d7-b9be-142d3b5acd9e) and click on Share -> Publish.
+## Model Information
 
-## Can I connect a custom domain to my Lovable project?
+**BLIP Model:** `Salesforce/blip-image-captioning-base`
+- Generates descriptive captions for images
+- Handles diverse image content and scenes
 
-Yes, you can!
+**spaCy Model:** `en_core_web_sm`
+- Extracts meaningful nouns and adjectives
+- Identifies compound concepts and phrases
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## Troubleshooting
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+**Backend not starting:**
+- Ensure Python 3.7+ is installed
+- Run `python setup.py` to install dependencies
+- Check that all models downloaded successfully
+
+**Search not working:**
+- Verify backend is running on port 5000
+- Check browser console for CORS errors
+- Ensure images have been uploaded first
+
+**Upload failing:**
+- Check file formats are supported
+- Verify backend has write permissions to uploads folder
+- Monitor backend logs for processing errors
+
+## Contributing
+
+Feel free to submit issues and enhancement requests!
