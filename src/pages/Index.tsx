@@ -5,6 +5,8 @@ import ImageUpload from '@/components/ImageUpload';
 import SearchInterface from '@/components/SearchInterface';
 import ImageGrid from '@/components/ImageGrid';
 import StatusBar from '@/components/StatusBar';
+import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 
 interface SearchResult {
   filename: string;
@@ -41,13 +43,18 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            AI Image Tagging & Search
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
+      <Navigation />
+      
+      <div className="container mx-auto px-6 py-12">
+        <div className="text-center mb-12">
+          <h1 className="text-5xl font-bold text-gray-900 mb-6">
+            AI Image Tagging &
+            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent ml-3">
+              Search
+            </span>
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
             Upload images for automatic AI-powered captioning and tag extraction, 
             then search your collection using natural language queries.
           </p>
@@ -56,17 +63,27 @@ const Index = () => {
         <StatusBar />
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 max-w-md mx-auto mb-8">
-            <TabsTrigger value="upload">Upload Images</TabsTrigger>
-            <TabsTrigger value="search">Search Images</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 max-w-md mx-auto mb-8 bg-white/70 backdrop-blur-sm border border-gray-200/50">
+            <TabsTrigger 
+              value="upload" 
+              className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+            >
+              Upload Images
+            </TabsTrigger>
+            <TabsTrigger 
+              value="search"
+              className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+            >
+              Search Images
+            </TabsTrigger>
           </TabsList>
           
-          <TabsContent value="upload" className="space-y-6">
+          <TabsContent value="upload" className="space-y-8">
             <ImageUpload onUploadComplete={handleUploadComplete} />
             
             {uploadedFiles.length > 0 && (
               <div>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4 text-center">
+                <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center">
                   Recently Uploaded Images
                 </h2>
                 <ImageGrid 
@@ -77,7 +94,7 @@ const Index = () => {
             )}
           </TabsContent>
           
-          <TabsContent value="search" className="space-y-6">
+          <TabsContent value="search" className="space-y-8">
             <SearchInterface 
               onSearchResults={handleSearchResults}
               onSearchQuery={handleSearchQuery}
@@ -92,11 +109,9 @@ const Index = () => {
             </div>
           </TabsContent>
         </Tabs>
-
-        <footer className="mt-16 text-center text-gray-500 text-sm">
-          <p>Powered by BLIP image captioning and spaCy NLP processing</p>
-        </footer>
       </div>
+
+      <Footer />
     </div>
   );
 };
