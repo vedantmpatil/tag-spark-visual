@@ -23,7 +23,8 @@ const TextSummarizer = () => {
     setIsLoadingModel(true);
     try {
       summarizer = await pipeline('summarization', 'Xenova/distilbart-cnn-6-6', {
-        quantized: false,
+        device: 'webgpu',
+        dtype: 'q8',
       });
       setIsLoadingModel(false);
       return summarizer;
