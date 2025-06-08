@@ -44,58 +44,67 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6">
             AI Image Tagging & Search
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
             Upload images for automatic AI-powered captioning and tag extraction, 
-            then search your collection using natural language queries.
+            then search your collection using natural language queries. Experience 
+            the future of intelligent image management.
           </p>
         </div>
 
         <StatusBar />
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 max-w-md mx-auto mb-8">
-            <TabsTrigger value="upload">Upload Images</TabsTrigger>
-            <TabsTrigger value="search">Search Images</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="upload" className="space-y-6">
-            <ImageUpload onUploadComplete={handleUploadComplete} />
+        <div className="max-w-6xl mx-auto">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-2 max-w-md mx-auto mb-8 bg-white shadow-lg border-2 border-gray-200">
+              <TabsTrigger 
+                value="upload" 
+                className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-purple-600 data-[state=active]:text-white transition-all duration-300"
+              >
+                Upload Images
+              </TabsTrigger>
+              <TabsTrigger 
+                value="search"
+                className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-purple-600 data-[state=active]:text-white transition-all duration-300"
+              >
+                Search Images
+              </TabsTrigger>
+            </TabsList>
             
-            {uploadedFiles.length > 0 && (
+            <TabsContent value="upload" className="space-y-8">
+              <ImageUpload onUploadComplete={handleUploadComplete} />
+              
+              {uploadedFiles.length > 0 && (
+                <div className="bg-white rounded-2xl shadow-xl border-2 border-gray-200 p-8">
+                  <h2 className="text-3xl font-bold text-gray-900 mb-6 text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    Recently Uploaded Images
+                  </h2>
+                  <ImageGrid 
+                    uploadedFiles={uploadedFiles}
+                    mode="upload"
+                  />
+                </div>
+              )}
+            </TabsContent>
+            
+            <TabsContent value="search" className="space-y-8">
+              <SearchInterface 
+                onSearchResults={handleSearchResults}
+                onSearchQuery={handleSearchQuery}
+              />
+              
               <div>
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4 text-center">
-                  Recently Uploaded Images
-                </h2>
                 <ImageGrid 
-                  uploadedFiles={uploadedFiles}
-                  mode="upload"
+                  results={searchResults}
+                  searchQuery={searchQuery}
+                  mode="search"
                 />
               </div>
-            )}
-          </TabsContent>
-          
-          <TabsContent value="search" className="space-y-6">
-            <SearchInterface 
-              onSearchResults={handleSearchResults}
-              onSearchQuery={handleSearchQuery}
-            />
-            
-            <div>
-              <ImageGrid 
-                results={searchResults}
-                searchQuery={searchQuery}
-                mode="search"
-              />
-            </div>
-          </TabsContent>
-        </Tabs>
-
-        <footer className="mt-16 text-center text-gray-500 text-sm">
-          <p>Powered by BLIP image captioning and spaCy NLP processing</p>
-        </footer>
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     </div>
   );

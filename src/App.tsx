@@ -8,6 +8,7 @@ import Navigation from "./components/Navigation";
 import Footer from "./components/Footer";
 import Index from "./pages/Index";
 import TextSummarizer from "./pages/TextSummarizer";
+import LiveDescriber from "./pages/LiveDescriber";
 import Explore from "./pages/Explore";
 import NotFound from "./pages/NotFound";
 
@@ -19,12 +20,13 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <div className="min-h-screen flex flex-col">
+        <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50">
           <Navigation />
           <main className="flex-1">
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/summarizer" element={<TextSummarizer />} />
+              <Route path="/live-describer" element={<LiveDescriber />} />
               <Route path="/explore" element={<Explore />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
